@@ -78,6 +78,41 @@ void main() {
     //Assert
     expect(find.byKey(ValueKey('logout')), findsOneWidget);
   });
+
+
+  /// Deny login attempt when fields are empty - should show an error dialog
+  testWidgets('Deny empty login fields test', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    //Arrange
+    final email = find.byKey(ValueKey('email'));
+    final password = find.byKey(ValueKey('password'));
+    final actionButton = find.byKey(ValueKey('login'));
+    LoginNotifierController mockLoginNotifierController = MockLoginNotifier();
+
+    //Act
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          loginNotifierProvider.overrideWith(() => mockLoginNotifierController),
+        ],
+        child: const MaterialApp(
+          home: LoginScreen(),
+        ),
+      ),
+    );
+
+
+    await tester.enterText(email, '');
+    await tester.enterText(password, '');
+    await tester.tap(actionButton);
+    await tester.pump();
+
+    // Wait for 2 seconds
+    await tester.pump(Duration(seconds: 2));
+
+    //Assert
+    expect(find.byKey(ValueKey('error')), findsOneWidget);
+  });
 }
 
 class MockLoginNotifier extends LoginNotifierController {

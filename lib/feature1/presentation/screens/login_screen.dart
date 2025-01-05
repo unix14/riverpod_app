@@ -11,6 +11,15 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentState = ref.watch(loginNotifierProvider);
 
+    // If error state occurs, show the error popup.
+    if (currentState is AsyncError) {
+      // Show the error dialog on top of the login screen.
+      Future.delayed(Duration.zero, () async {
+        await _showErrorDialog(context, currentState.error.toString());
+        ref.read(loginNotifierProvider.notifier).performLogout();
+      });
+    }
+
     return Scaffold(
         appBar: AppBar(
           title:
@@ -24,6 +33,29 @@ class LoginScreen extends ConsumerWidget {
           LoginState.loggedOut => loginWidget(ref),
           LoginState.loading => Center(child: CircularProgressIndicator()),
         });
+  }
+
+  // Method to show an error dialog
+  Future<void> _showErrorDialog(BuildContext context, String errorMessage) async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent closing dialog without action
+      builder: (BuildContext context) {
+        return AlertDialog(
+          key: Key("error"),
+          title: const Text("Error"),
+          content: Text(errorMessage),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget logoutWidget(ref) {
