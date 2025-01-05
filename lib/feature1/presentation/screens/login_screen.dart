@@ -15,7 +15,7 @@ class LoginScreen extends ConsumerWidget {
         appBar: AppBar(
           title:
             currentState.when(
-                data: (data) => Text(data == LoginState.loggedIn ? 'Logout State' : 'Login State}'),
+                data: (data) => Text(data == LoginState.loggedIn ? 'Logout State' : 'Login State'),
                 error: (error, _) => Text(error.toString()),
                 loading: () => const CircularProgressIndicator()),
         ),
@@ -33,6 +33,7 @@ class LoginScreen extends ConsumerWidget {
         child: Column(
           children: [
             ElevatedButton(
+                key: Key('logout'),
                 onPressed: () => ref
                     .read(loginNotifierProvider.notifier)
                     .performLogout(),
