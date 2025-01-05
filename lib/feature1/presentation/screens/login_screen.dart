@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/providers/service_locator.dart';
 import '../providers/login_provider.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -12,11 +13,13 @@ class LoginScreen extends ConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: currentState == LoginState.loggedIn
-              ? const Text('Logout State')
-              : const Text('Login State'),
+          title:
+            currentState.when(
+                data: (data) => Text(data == LoginState.loggedIn ? 'Logout State' : 'Login State}'),
+                error: (error, _) => Text(error.toString()),
+                loading: () => const CircularProgressIndicator()),
         ),
-        body: switch (currentState) {
+        body: switch (currentState.value ?? LoginState.loggedOut) {
           LoginState.loggedIn => logoutWidget(ref),
           LoginState.loggedOut => loginWidget(ref),
           LoginState.loading => Center(child: CircularProgressIndicator()),

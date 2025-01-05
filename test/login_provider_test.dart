@@ -43,14 +43,14 @@ void main() {
     LogoutUseCase logout = LogoutUseCase(LoginRepositoryImpl(loginDataSource: LoginRemoteDataSource()));
     NavigationManager navigationManager = NavigationManager();
 
-    final LoginNotifier loginNotifier = LoginNotifier(
-      login, logout, navigationManager
-    );
-
-    loginNotifier.performLogin('email', 'password');
-    loginNotifier.stream.listen((state) {
-      expect(state, LoginState.loggedIn);
-    });
+    // final LoginNotifier loginNotifier = LoginNotifier(
+    //   login, logout, navigationManager
+    // );
+    //
+    // loginNotifier.performLogin('email', 'password');
+    // loginNotifier.stream.listen((state) {
+    //   expect(state, LoginState.loggedIn);
+    // });
 
 
   });

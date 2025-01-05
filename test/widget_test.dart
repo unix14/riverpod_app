@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:riverpod_app/core/providers/service_locator.dart';
 import 'package:riverpod_app/core/router/navigation_manager.dart';
 import 'package:riverpod_app/feature1/data/datasource/login_remote_datasource.dart';
 import 'package:riverpod_app/feature1/data/repositories/login_repository_impl.dart';
@@ -43,19 +44,14 @@ void main() {
     final password = find.byKey(ValueKey('password'));
     final addButton = find.byKey(ValueKey('login'));
 
-    LoginNotifier mockLoginNotifier = MockLoginNotifier(
-        LoginUseCase(
-            LoginRepositoryImpl(loginDataSource: LoginRemoteDataSource())),
-        LogoutUseCase(
-            LoginRepositoryImpl(loginDataSource: LoginRemoteDataSource())),
-        NavigationManager());
+    LoginNotifierController mockLoginNotifierController = MockLoginNotifier();
 
     //Act
 
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          loginNotifierProvider.overrideWith((ref) => mockLoginNotifier),
+          loginNotifierProvider.overrideWith(() => MockLoginNotifier()),
         ],
         child: const MaterialApp(
           home: LoginScreen(),
@@ -76,7 +72,6 @@ void main() {
   });
 }
 
-class MockLoginNotifier extends LoginNotifier {
-  MockLoginNotifier(
-      super.loginUseCase, super.logoutUseCase, super.navigationManager);
+class MockLoginNotifier extends LoginNotifierController {
+  MockLoginNotifier();
 }

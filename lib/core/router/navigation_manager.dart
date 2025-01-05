@@ -29,7 +29,7 @@ class NavigationManager{
   /// Decoupled navigation
   goToLogoutScreen() => push(AppPages.logout.routePath);
   goToLoginScreen() => push(AppPages.login.routePath);
-  goToProductsScreen() => push(AppPages.pagex.routePath);
+  goToProductsScreen() => push(AppPages.products.routePath);
   goToPageX() {
     push(AppPages.products.routePath);
     push(AppPages.pagex.routePath);
