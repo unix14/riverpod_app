@@ -9,49 +9,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:riverpod_app/core/providers/service_locator.dart';
-import 'package:riverpod_app/core/router/navigation_manager.dart';
-import 'package:riverpod_app/feature1/data/datasource/login_remote_datasource.dart';
-import 'package:riverpod_app/feature1/data/repositories/login_repository_impl.dart';
-import 'package:riverpod_app/feature1/domain/usecases/login.dart';
-import 'package:riverpod_app/feature1/domain/usecases/logout.dart';
 import 'package:riverpod_app/feature1/presentation/providers/login_provider.dart';
 import 'package:riverpod_app/feature1/presentation/screens/login_screen.dart';
 
-import 'package:riverpod_app/main.dart';
-
 void main() {
-  // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-  //   // Build our app and trigger a frame.
-  //   await tester.pumpWidget(const MyApp());
-  //
-  //   // Verify that our counter starts at 0.
-  //   expect(find.text('0'), findsOneWidget);
-  //   expect(find.text('1'), findsNothing);
-  //
-  //   // Tap the '+' icon and trigger a frame.
-  //   await tester.tap(find.byIcon(Icons.add));
-  //   await tester.pump();
-  //
-  //   // Verify that our counter has incremented.
-  //   expect(find.text('0'), findsNothing);
-  //   expect(find.text('1'), findsOneWidget);
-  // });
 
   testWidgets('demo widget test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     //Arrange
     final email = find.byKey(ValueKey('email'));
     final password = find.byKey(ValueKey('password'));
-    final addButton = find.byKey(ValueKey('login'));
 
     LoginNotifierController mockLoginNotifierController = MockLoginNotifier();
 
     //Act
-
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          loginNotifierProvider.overrideWith(() => MockLoginNotifier()),
+          loginNotifierProvider.overrideWith(() => mockLoginNotifierController),
         ],
         child: const MaterialApp(
           home: LoginScreen(),
@@ -62,13 +37,81 @@ void main() {
 
     await tester.enterText(email, 'test@email.com');
     await tester.enterText(password, 'password.test');
-    // await tester.tap(addButton);
     await tester.pump();
 
     //Assert
     expect(find.text('password.test'), findsOneWidget);
     expect(find.text('test@email.com'), findsOneWidget);
-    // expect(find.text('Logout'), findsOneWidget);
+  });
+
+
+  /// Test to see if clicking on login button changes the screen and now we have a logout button
+  testWidgets('demo widget test 2', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    //Arrange
+    final email = find.byKey(ValueKey('email'));
+    final password = find.byKey(ValueKey('password'));
+    final actionButton = find.byKey(ValueKey('login'));
+    LoginNotifierController mockLoginNotifierController = MockLoginNotifier();
+
+    //Act
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          loginNotifierProvider.overrideWith(() => mockLoginNotifierController),
+        ],
+        child: const MaterialApp(
+          home: LoginScreen(),
+        ),
+      ),
+    );
+
+
+    await tester.enterText(email, 'test@email.com');
+    await tester.enterText(password, 'password.test');
+    await tester.tap(actionButton);
+    await tester.pump();
+
+    // Wait for 2 seconds
+    await tester.pump(Duration(seconds: 2));
+
+    //Assert
+    expect(find.byKey(ValueKey('logout')), findsOneWidget);
+  });
+
+
+  /// Deny login attempt when fields are empty - should show an error dialog
+  testWidgets('Deny empty login fields test', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    //Arrange
+    final email = find.byKey(ValueKey('email'));
+    final password = find.byKey(ValueKey('password'));
+    final actionButton = find.byKey(ValueKey('login'));
+    LoginNotifierController mockLoginNotifierController = MockLoginNotifier();
+
+    //Act
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          loginNotifierProvider.overrideWith(() => mockLoginNotifierController),
+        ],
+        child: const MaterialApp(
+          home: LoginScreen(),
+        ),
+      ),
+    );
+
+
+    await tester.enterText(email, '');
+    await tester.enterText(password, '');
+    await tester.tap(actionButton);
+    await tester.pump();
+
+    // Wait for 2 seconds
+    await tester.pump(Duration(seconds: 2));
+
+    //Assert
+    expect(find.byKey(ValueKey('error')), findsOneWidget);
   });
 }
 

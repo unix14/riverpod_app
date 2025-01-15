@@ -29,6 +29,11 @@ class LoginNotifierController extends AutoDisposeAsyncNotifier<LoginState> {
 
   Future<void> performLogin(String email, String password) async {
     state = AsyncValue.data(LoginState.loading);
+    //Validation
+    if(email.isEmpty || password.isEmpty) {
+      state = AsyncValue.error(LoginState.loggedOut, StackTrace.fromString("Empty fields Error message"));
+      return;
+    }
     final loginUseCase = ref.read(loginUseCaseProvider);
     bool isLoggedIn = await loginUseCase.call(email: email, password: password);
     state = AsyncValue.data(isLoggedIn ? LoginState.loggedIn : LoginState.loggedOut);
