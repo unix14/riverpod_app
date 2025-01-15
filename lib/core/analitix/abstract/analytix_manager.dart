@@ -1,14 +1,11 @@
 
-
 import 'package:riverpod_app/core/analitix/abstract/base_reporter.dart';
-import 'package:riverpod_app/core/analitix/reporters/custom_reporter.dart';
-import 'package:riverpod_app/core/analitix/reporters/printer_reporter.dart';
-
 import '../models/analytix_event.dart';
 
-class AnalytixManager {
+export '../reporters/custom_reporter.dart';
+export '../reporters/printer_reporter.dart';
 
-  static final AnalytixManager _instance = AnalytixManager._internal();
+class AnalytixManager {
 
   bool _isCollectionEnabled = true;
   String? _screenName;
@@ -17,16 +14,7 @@ class AnalytixManager {
   Map<String, dynamic> _deviceProperties = {};
   final List<AnalytixEvent> _allEvents = [];
 
-  factory AnalytixManager() {
-    return _instance;
-  }
-
-  AnalytixManager._internal();
-
-  List<BaseReporter> reporters = [
-    PrinterReporter(),
-    CustomReporter(),
-  ];
+  List<BaseReporter> reporters = [];
 
   void init() {
     print('AnalytixManager init');
