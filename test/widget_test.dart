@@ -54,7 +54,6 @@ void main() {
     final actionButton = find.byKey(ValueKey('login'));
     LoginNotifierController mockLoginNotifierController = MockLoginNotifier();
 
-    //Act
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -66,14 +65,15 @@ void main() {
       ),
     );
 
-
     await tester.enterText(email, 'test@email.com');
     await tester.enterText(password, 'password.test');
+
+    //Act
     await tester.tap(actionButton);
     await tester.pump();
 
     // Wait for 2 seconds
-    await tester.pump(Duration(seconds: 2));
+    await tester.pump(Duration(seconds: 2)); // todo replace without hardcoded 2 sec delay
 
     //Assert
     expect(find.byKey(ValueKey('logout')), findsOneWidget);
@@ -89,7 +89,6 @@ void main() {
     final actionButton = find.byKey(ValueKey('login'));
     LoginNotifierController mockLoginNotifierController = MockLoginNotifier();
 
-    //Act
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -101,14 +100,15 @@ void main() {
       ),
     );
 
-
     await tester.enterText(email, '');
     await tester.enterText(password, '');
+
+    //Act
     await tester.tap(actionButton);
     await tester.pump();
 
     // Wait for 2 seconds
-    await tester.pump(Duration(seconds: 2));
+    await tester.pump(Duration(seconds: 2)); // todo replace without hardcoded 2 sec delay
 
     //Assert
     expect(find.byKey(ValueKey('error')), findsOneWidget);
