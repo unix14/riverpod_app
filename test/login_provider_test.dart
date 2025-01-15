@@ -1,57 +1,52 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_app/core/router/navigation_manager.dart';
+import 'package:riverpod_app/core/providers/service_locator.dart';
 import 'package:riverpod_app/feature1/data/datasource/login_remote_datasource.dart';
-import 'package:riverpod_app/feature1/data/repositories/login_repository_impl.dart';
-import 'package:riverpod_app/feature1/domain/repositories/login_repository.dart';
-import 'package:riverpod_app/feature1/domain/usecases/login.dart';
-import 'package:riverpod_app/feature1/domain/usecases/logout.dart';
 import 'package:riverpod_app/feature1/presentation/providers/login_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 
-class MockLoginUseCase extends LoginUseCase {
-  MockLoginUseCase(super.loginRepository);
-
+class MockLoginDataSource extends LoginRemoteDataSource {
   @override
-  Future<bool> call({String email = '', String password = ''}) async {
-    return true;
-  }
-}
-
-class MockLogoutUseCase implements LogoutUseCase {
-  MockLogoutUseCase();
-
-  @override
-  Future<bool> call() {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<bool> login() async {
+    return await Future.value(true);
   }
 
   @override
-  // TODO: implement loginRepository
-  LoginRepository get loginRepository => throw UnimplementedError();
-
+  Future<bool> logout() async {
+    return await Future.value(true);
+  }
 }
 
 void main() {
 
 
+  // Test with override
+  test('test...', () async {
+    var overrides =  [loginDataSourceProvider.overrideWith((ref){
+      return MockLoginDataSource();
+    })];
 
-  test('test...', (){
+    final container = createContainer(overrides: overrides);
 
-    LoginUseCase login = MockLoginUseCase(LoginRepositoryImpl(loginDataSource: LoginRemoteDataSource()));
-    LogoutUseCase logout = LogoutUseCase(LoginRepositoryImpl(loginDataSource: LoginRemoteDataSource()));
-    NavigationManager navigationManager = NavigationManager();
-
-    // final LoginNotifier loginNotifier = LoginNotifier(
-    //   login, logout, navigationManager
-    // );
-    //
-    // loginNotifier.performLogin('email', 'password');
-    // loginNotifier.stream.listen((state) {
-    //   expect(state, LoginState.loggedIn);
-    // });
-
-
+    final controller =  container.read(loginNotifierProvider.notifier);
+    controller.performLogin('email', 'password').then((_){
+         expect(container.read(loginNotifierProvider).value,LoginState.loggedIn);
+        }
+    );
   });
- }
+}
+
+
+ProviderContainer createContainer({
+  ProviderContainer? parent,
+  List<Override> overrides = const [],
+  List<ProviderObserver>? observers,
+}) {
+  final container = ProviderContainer(
+    parent: parent,
+    overrides: overrides,
+    observers: observers,
+  );
+  addTearDown(container.dispose);
+  return container;
+}

@@ -3,12 +3,6 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/service_locator.dart';
 import '../../../core/router/navigation_manager.dart';
-import '../../data/datasource/LoginDataSource.dart';
-import '../../domain/usecases/logout.dart';
-import '../../data/datasource/login_remote_datasource.dart';
-import '../../data/repositories/login_repository_impl.dart';
-import '../../domain/repositories/login_repository.dart';
-import '../../domain/usecases/login.dart';
 
 
 enum LoginState {
@@ -71,7 +65,7 @@ class LoginNotifierController extends AutoDisposeAsyncNotifier<LoginState> {
 //   final LogoutUseCase logoutUseCase;
 //   final NavigationManager navigationManager;
 //
-//   LoginNotifier(this.loginUseCase, this.logoutUseCase, this.navigationManager) : super(LoginState.loggedOut);
+//   LoginNotifier(this.loginUseCase, this.logoutUseCase, this.navigationManager) : super(LoginState.loggedOut){};
 //
 //   Future<void> performLogin(String email, String password) async {
 //     state = LoginState.loading;

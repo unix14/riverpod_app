@@ -26,12 +26,18 @@ class NavigationManager{
     goRouter.pop();
   }
 
+  bool isCurrentRoute(String route) {
+    // RouteBase rb = goRouter.configuration.routes.last;
+
+    return goRouter.state?.name == route;
+  }
+
   /// Decoupled navigation
   goToLogoutScreen() => push(AppPages.logout.routePath);
   goToLoginScreen() => push(AppPages.login.routePath);
   goToProductsScreen() => push(AppPages.products.routePath);
   goToPageX() {
-    push(AppPages.products.routePath);
-    push(AppPages.pagex.routePath);
+    goRouter.push(AppPages.products.routePath);
+    goRouter.push(AppPages.pagex.routePath);
   }
 }

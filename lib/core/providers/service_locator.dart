@@ -32,3 +32,7 @@ final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
 final loginNotifierProvider = AutoDisposeAsyncNotifierProvider<LoginNotifierController, LoginState>(
   () => LoginNotifierController(),
 );
+
+//network Provider
+
+///agala
