@@ -8,6 +8,7 @@ import '../../feature1/domain/usecases/logout.dart';
 import '../../feature1/presentation/providers/login_provider.dart';
 import 'package:riverpod_app/core/analitix/abstract/analytix_manager.dart';
 
+import '../logger/logger.dart';
 
 //***** login providers *****//
 
@@ -45,4 +46,11 @@ final analytixProvider = Provider((Ref<AnalytixManager> ref) {
   ]);
   return analyticsManager;
 });
+
+
+//***** logger provider *****//
+final loggerProvider = Provider<Logger>((ref) {
+  return Logger();
+});
+
 ///agala
