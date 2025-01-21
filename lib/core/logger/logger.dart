@@ -6,10 +6,10 @@ import 'package:ansi_styles/ansi_styles.dart';
 /// This enum is used to define the log level
 /// It has four values: debug, error, warning, info
 enum LogLevel {
+  info,
   debug,
-  error,
   warning,
-  info
+  error,
 }
 
 //*** Extensions ***//
@@ -55,13 +55,14 @@ class Logger {
   bool isActive = true;
 
   //*** Constructor ***//
-  Logger({this.isActive = true}) {
+  Logger({this.isActive = true, LogLevel minimumLevel = LogLevel.debug}) {
     print('BaseLogger constructor');
   }
 
   //*** Public methods ***//
   void log(LogLevel level, String message) {
     if(!isActive) return;
+    if(level.index < LogLevel.values.length) return;
     print(message.getColoredString(level));
   }
 
