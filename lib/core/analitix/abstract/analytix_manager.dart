@@ -69,7 +69,7 @@ class AnalytixManager {
 
   void setDeviceProperties(Map<String, dynamic> properties) {
     print('AnalytixManager setDeviceProperties: $properties');
-    _userProperties.addAll(properties);
+    _deviceProperties.addAll(properties);
   }
 
   void setUserProperty(String name, dynamic value) {
