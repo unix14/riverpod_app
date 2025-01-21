@@ -40,4 +40,8 @@ class NavigationManager{
     goRouter.push(AppPages.products.routePath);
     goRouter.push(AppPages.pagex.routePath);
   }
+
+  goToNextBusinessScreen() => push(AppPages.businessNext.routePath);
+  goToNextOrdersScreen() => push(AppPages.ordersNext.routePath);
+  goToNextCartScreen() => push(AppPages.cartNext.routePath);
 }
