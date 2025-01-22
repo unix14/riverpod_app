@@ -1,6 +1,6 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_app/core/analitix/abstract/analytix_manager.dart';
+import 'package:riverpod_app/core/analytix/abstract/analytix_manager.dart';
 
 final analytixProvider = Provider<AnalytixManager>((ref) {
   AnalytixManager analyticsManager = AnalytixManager();

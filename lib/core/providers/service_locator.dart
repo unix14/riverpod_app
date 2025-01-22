@@ -6,7 +6,6 @@ import '../../feature1/domain/repositories/login_repository.dart';
 import '../../feature1/domain/usecases/login.dart';
 import '../../feature1/domain/usecases/logout.dart';
 import '../../feature1/presentation/providers/login_provider.dart';
-import 'package:riverpod_app/core/analitix/abstract/analytix_manager.dart';
 
 import '../logger/logger.dart';
 
@@ -36,16 +35,6 @@ final loginNotifierProvider = AutoDisposeAsyncNotifierProvider<LoginNotifierCont
 );
 
 //network Provider
-
-//***** analytix providers *****//
-final analytixProvider = Provider((Ref<AnalytixManager> ref) {
-  AnalytixManager analyticsManager = AnalytixManager();
-  analyticsManager.addReporters([
-    /// Todo:: add more custom reporters ( Such as: Mixpanel and Firebase )
-    PrinterReporter(),
-  ]);
-  return analyticsManager;
-});
 
 
 //***** logger provider *****//

@@ -1,5 +1,5 @@
 
-import 'package:riverpod_app/core/analitix/extensions/map_extenions.dart';
+import 'package:riverpod_app/core/analytix/extensions/map_extenions.dart';
 
 class AnalytixEvent {
   final String eventName;
