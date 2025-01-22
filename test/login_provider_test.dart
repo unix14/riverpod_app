@@ -19,9 +19,9 @@ class MockLoginDataSource extends LoginRemoteDataSource {
 
 void main() {
 
-
-  // Test with override
-  test('test...', () async {
+  // Test login state
+  test('test login state', () {
+    /// Arrange
     var overrides =  [loginDataSourceProvider.overrideWith((ref){
       return MockLoginDataSource();
     })];
@@ -29,7 +29,10 @@ void main() {
     final container = createContainer(overrides: overrides);
 
     final controller =  container.read(loginNotifierProvider.notifier);
+
+    ///Act
     controller.performLogin('email', 'password').then((_){
+         ///assert
          expect(container.read(loginNotifierProvider).value,LoginState.loggedIn);
         }
     );
