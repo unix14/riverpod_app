@@ -1,5 +1,5 @@
 
-import 'package:riverpod_app/core/analitix/models/analytix_event.dart';
+import 'package:riverpod_app/core/analytix/models/analytix_event.dart';
 import '../abstract/base_reporter.dart';
 
 /// CustomReporter class

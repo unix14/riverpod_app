@@ -10,6 +10,7 @@ enum LogLevel {
   debug,
   warning,
   error,
+  success,
 }
 
 //*** Extensions ***//
@@ -28,13 +29,15 @@ extension StringColorExtension on String {
   String getColoredString(LogLevel logLevel) {
     var logText = '${logLevel.name}: $this';
     switch(logLevel) {
+      case LogLevel.info:
+        return logText;
       case LogLevel.debug:
         return AnsiStyles.blue(logText);
-      case LogLevel.error:
-        return AnsiStyles.red(logText);
       case LogLevel.warning:
         return AnsiStyles.yellow(logText);
-      case LogLevel.info:
+      case LogLevel.error:
+        return AnsiStyles.red(logText);
+      case LogLevel.success:
         return AnsiStyles.green(logText);
     }
   }
@@ -66,16 +69,23 @@ class Logger {
     print(message.getColoredString(level));
   }
 
+  void info(String message) {
+    log(LogLevel.info, message);
+  }
+
   void debug(String message) {
     log(LogLevel.debug, message);
   }
-  void error(String message) {
-    log(LogLevel.error, message);
-  }
+
   void warning(String message) {
     log(LogLevel.warning, message);
   }
-  void info(String message) {
-    log(LogLevel.info, message);
+
+  void error(String message) {
+    log(LogLevel.error, message);
+  }
+
+  void success(String message) {
+    log(LogLevel.success, message);
   }
 }
