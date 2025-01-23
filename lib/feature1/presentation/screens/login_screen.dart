@@ -10,6 +10,9 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentState = ref.watch(loginNotifierProvider);
+    // example of usage:
+    // LoginNotifierController controller = ref.read(loginNotifierProvider.notifier);
+    // controller.goToPageX();
 
     // If error state occurs, show the error popup.
     if (currentState is AsyncError) {
