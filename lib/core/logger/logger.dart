@@ -44,28 +44,31 @@ extension StringColorExtension on String {
 }
 
 //*** Main Logger Class ***//
-/// The BaseLogger class is used to log messages to the console
+/// The Logger class is used to log messages to the console
 /// It has four methods: debug, error, warning, info
 /// Each method logs the message with a different log level
 /// The log method is used to log the message with the specified log level
 /// The isActive property is used to enable or disable the logger
 /// If the logger is disabled, the log method does nothing
 /// @param isActive: A boolean value that specifies if the logger is active
-/// @return: A BaseLogger object
+/// @param minimumLevel: A LogLevel value that specifies the minimum log level
+/// The logger will only log messages with a log level greater than or equal to the minimum level
+/// The default value is LogLevel.debug
 class Logger {
 
   //*** Properties ***//
   bool isActive = true;
+  LogLevel minimumLevel = LogLevel.debug;
 
   //*** Constructor ***//
-  Logger({this.isActive = true, LogLevel minimumLevel = LogLevel.debug}) {
+  Logger({this.isActive = true, this.minimumLevel = LogLevel.debug}) {
     print('BaseLogger constructor');
   }
 
   //*** Public methods ***//
   void log(LogLevel level, String message) {
     if(!isActive) return;
-    if(level.index < LogLevel.values.length) return;
+    if(level.index < minimumLevel.index) return;
     print(message.getColoredString(level));
   }
 
