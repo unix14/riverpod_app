@@ -1,7 +1,5 @@
 import '../../domain/repositories/login_repository.dart';
 import '../datasource/LoginDataSource.dart';
-import '../datasource/login_local_datasource.dart';
-import '../datasource/login_remote_datasource.dart';
 
 class LoginRepositoryImpl implements LoginRepository {
 

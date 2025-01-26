@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_app/core/theme/cbc_theme.dart';
 
 import 'core/router/router_provider.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Riverpod App',
-      theme: ThemeData(primarySwatch: Colors.red,),
+      theme: CBCTheme.theme,
       routerConfig: goRouter,
     );
   }

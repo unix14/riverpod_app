@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_app/core/widgets/sale_organization_item.dart';
+
+import 'navigation_bar_item.dart';
 
 class ScaffoldNavigationBar extends StatelessWidget {
   const ScaffoldNavigationBar({
@@ -19,7 +22,9 @@ class ScaffoldNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('navigation screens app bar'),),
+        appBar: AppBar(
+          title: Text('navigation screens app bar'),
+        ),
         body: navigationShell,
         bottomNavigationBar: CustomNavigationBar(
           onSelectionChanged: (int selection) {
@@ -68,10 +73,15 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                   itemSelected(1);
                 },
               ),
-              Icon(
-                Icons.add_circle,
-                color: Colors.white,
-                size: 48,
+              InkWell(
+                onTap: () {
+                  newOrderBottomSheet(context);
+                },
+                child: Icon(
+                  Icons.add_circle,
+                  color: Colors.white,
+                  size: 48,
+                ),
               ),
               NavigationBarItem(
                 label: 'העסק שלי',
@@ -96,51 +106,62 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     );
   }
 
+  Future<dynamic> newOrderBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: 270,
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            color: Colors.black,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'מה מזמינים היום?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        context.pop();
+                      },
+                      child: Icon(
+                        Icons.close_sharp,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 36,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SaleOrganizationItem(iconPath: 'iconPath', title: 'אלכוהול', isCartExist: true,),
+                    SaleOrganizationItem(iconPath: 'iconPath', title: 'חלב, סחוט ויין'),
+                    SaleOrganizationItem(iconPath: 'iconPath', title: 'משקאות'),
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
+
   itemSelected(int selected) {
     setState(() {
       selectedIndex = selected;
       widget.onSelectionChanged(selected);
     });
-  }
-}
-
-class NavigationBarItem extends StatelessWidget {
-  final String label;
-  final IconData iconData;
-  final bool isSelected;
-
-  final Function() onTap;
-
-  const NavigationBarItem(
-      {super.key,
-      required this.label,
-      required this.iconData,
-      required this.isSelected,
-      required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(4),
-            child: Icon(
-              iconData,
-              color: isSelected ? Colors.lightGreenAccent : Colors.white,
-            ),
-          ),
-          Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                  color: isSelected ? Colors.lightGreenAccent : Colors.grey),
-            ),
-          )
-        ],
-      ),
-    );
   }
 }
