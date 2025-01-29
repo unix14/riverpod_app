@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/service_locator.dart';
+import '../../../core/translations/translations_consts.dart';
+import '../../../core/translations/translations_manager.dart';
 import '../providers/login_provider.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -9,7 +11,10 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final currentState = ref.watch(loginNotifierProvider);
+    TranslationsManager tm = ref.watch(translationsManagerProvider).requireValue;
+
     // example of usage:
     // LoginNotifierController controller = ref.read(loginNotifierProvider.notifier);
     // controller.goToPageX();
@@ -32,8 +37,8 @@ class LoginScreen extends ConsumerWidget {
                 loading: () => const CircularProgressIndicator()),
         ),
         body: switch (currentState.value ?? LoginState.loggedOut) {
-          LoginState.loggedIn => logoutWidget(ref),
-          LoginState.loggedOut => loginWidget(ref),
+          LoginState.loggedIn => logoutWidget(ref, tm),
+          LoginState.loggedOut => loginWidget(ref, tm),
           LoginState.loading => Center(child: CircularProgressIndicator()),
         });
   }
@@ -61,7 +66,7 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget logoutWidget(ref) {
+  Widget logoutWidget(WidgetRef ref, TranslationsManager tm) {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Center(
@@ -72,24 +77,24 @@ class LoginScreen extends ConsumerWidget {
                 onPressed: () => ref
                     .read(loginNotifierProvider.notifier)
                     .performLogout(),
-                child: const Text('Logout')),
+                child: Text(tm.get(homeScreenLogoutButton))),
             SizedBox(height: 36),
             ElevatedButton(
                 onPressed: () =>
                     ref.read(loginNotifierProvider.notifier).goToProductsScreen(),
-                child: const Text('Go to a different screen')),
+                child: Text(tm.get(homeScreenGoToDifferentScreen))),
             SizedBox(height: 36),
             ElevatedButton(
                 onPressed: () =>
                     ref.read(loginNotifierProvider.notifier).goToPageX(),
-                child: const Text('Jump to a PageX')),
+                child :Text(tm.get(homeScreenJumpToPageX))),
           ],
         ),
       ),
     );
   }
 
-  Widget loginWidget(WidgetRef ref) {
+  Widget loginWidget(WidgetRef ref, TranslationsManager tm) {
     String email = '';
     String password = '';
 
@@ -105,7 +110,7 @@ class LoginScreen extends ConsumerWidget {
               email = value;
             }),
             SizedBox(height: 10),
-            const Text('Password'),
+            Text(tm.get(generalPassword)),
             SizedBox(height: 50),
             TextField(
                 key: Key('password'),
@@ -113,14 +118,14 @@ class LoginScreen extends ConsumerWidget {
               password = value;
             }),
             SizedBox(height: 10),
-            const Text('Email'),
+            Text(tm.get(generalEmail)),
             SizedBox(height: 80),
             ElevatedButton(
               key: Key('login'),
                 onPressed: () => ref
                     .read(loginNotifierProvider.notifier)
                     .performLogin(email, password),
-                child: const Text('Login')),
+                child: Text(tm.get(homeScreenLoginButton))),
           ],
         ),
       ),

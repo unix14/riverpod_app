@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_app/app_startup_widget.dart';
 import 'package:riverpod_app/core/router/navigation_manager.dart';
 import 'package:riverpod_app/core/router/route_utils.dart';
 import 'package:riverpod_app/core/widgets/scaffold_navigation_bar.dart';
@@ -19,9 +20,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   final navigationManager = ref.read(navigationManagerProvider);
 
 final goRouter = GoRouter(
-    initialLocation: AppPages.login.routePath,
+    initialLocation: AppPages.init.routePath,
     navigatorKey: _rootNavigatorKey,
     routes: [
+      GoRoute(
+        path: AppPages.init.routePath,
+        name: AppPages.init.name,
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(title: Text('init screen app bar'),),
+          body: AppStartupWidget(),
+        )),
       GoRoute(
         path: AppPages.logout.routePath,
         name: AppPages.logout.name,

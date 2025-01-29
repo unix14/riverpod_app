@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:riverpod_app/feature1/data/datasource/LoginDataSource.dart';
+import 'package:riverpod_app/feature1/data/datasource/login_data_source.dart';
 
 class LoginLocalDataSource implements LoginDataSource {
 

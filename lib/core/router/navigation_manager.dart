@@ -34,7 +34,8 @@ class NavigationManager{
 
   /// Decoupled navigation
   goToLogoutScreen() => push(AppPages.logout.routePath);
-  goToLoginScreen() => push(AppPages.login.routePath);
+  goToLoginScreen() => _clearAndNavigate(AppPages.login.routePath);
+
   goToProductsScreen() => push(AppPages.products.routePath);
   goToPageX() {
     goRouter.push(AppPages.products.routePath);
@@ -44,4 +45,11 @@ class NavigationManager{
   goToNextBusinessScreen() => push(AppPages.businessNext.routePath);
   goToNextOrdersScreen() => push(AppPages.ordersNext.routePath);
   goToNextCartScreen() => push(AppPages.cartNext.routePath);
+
+  _clearAndNavigate(String path) {
+    while (goRouter.canPop() == true) {
+      goRouter.pop();
+    }
+    goRouter.pushReplacement(path);
+  }
 }

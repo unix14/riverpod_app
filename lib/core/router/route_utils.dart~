@@ -1,6 +1,5 @@
 
 enum AppPages {
-  init,
   login,
   logout,
   products,
@@ -14,8 +13,7 @@ enum AppPages {
   ordersNext,
 }
 
-const String init = "/";
-const String login = "/login";
+const String login = "/";
 const String logout = "/logout";
 const String products = "/products";
 const String pagex = "/products/pagex";
@@ -31,8 +29,6 @@ const String ordersNext = "/ordersNext";
 extension AppPageExtension on AppPages {
   String get routePath {
     switch (this) {
-      case AppPages.init:
-        return init;
       case AppPages.login:
         return login;
       case AppPages.logout:
@@ -63,8 +59,6 @@ extension AppPageExtension on AppPages {
     final paramsPath = params.reduce((value, element) => '/$value/$element');
 
     switch (this) {
-      case AppPages.init:
-        return "/init$paramsPath";
       case AppPages.login:
         return "/login$paramsPath";
       case AppPages.logout:
@@ -93,8 +87,6 @@ extension AppPageExtension on AppPages {
 // for named routes
   String get routeName {
     switch (this) {
-      case AppPages.init:
-        return "INIT";
       case AppPages.login:
         return "LOGIN";
       case AppPages.logout:
@@ -122,8 +114,6 @@ extension AppPageExtension on AppPages {
 // for page titles to use on appbar
   String get routePageTitle {
     switch (this) {
-      case AppPages.init:
-        return "Init";
       case AppPages.login:
         return "Login";
       case AppPages.logout:
