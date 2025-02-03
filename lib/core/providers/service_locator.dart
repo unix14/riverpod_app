@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../feature1/data/datasource/login_data_source.dart';
 import '../../feature1/data/datasource/login_remote_datasource.dart';
@@ -10,6 +11,7 @@ import '../../feature1/presentation/providers/login_provider.dart';
 import '../db/storage_manager.dart';
 import '../logger/logger.dart';
 import '../translations/translations_manager.dart';
+import 'language_provider.dart';
 
 //***** Startup provider *****//
 final appStartupProvider = FutureProvider<bool>((ref) async {
@@ -20,6 +22,7 @@ final appStartupProvider = FutureProvider<bool>((ref) async {
   // initialize the providers by awaiting its .future
   await ref.watch(storageManagerProvider.future);
   await ref.watch(translationsManagerProvider.future);
+  ref.watch(languageProvider);
   return true;
 });
 
@@ -33,6 +36,11 @@ final translationsManagerProvider = FutureProvider<TranslationsManager>((ref) as
   TranslationsManager tm = TranslationsManager();
   // await tm.init();
   return tm;
+});
+
+///***** Language Provider *****//
+final languageProvider = NotifierProvider<LanguageManager, Locale>(() {
+  return LanguageManager();
 });
 
 //***** login providers *****//

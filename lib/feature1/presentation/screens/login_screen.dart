@@ -88,6 +88,11 @@ class LoginScreen extends ConsumerWidget {
                 onPressed: () =>
                     ref.read(loginNotifierProvider.notifier).goToPageX(),
                 child :Text(tm.get(homeScreenJumpToPageX))),
+            SizedBox(height: 36),
+            ElevatedButton(
+                onPressed: () =>
+                    ref.read(loginNotifierProvider.notifier).changeLanguage(),
+                child :Text(tm.get(homeScreenChangeLanguage))),
           ],
         ),
       ),
@@ -102,6 +107,7 @@ class LoginScreen extends ConsumerWidget {
       padding: const EdgeInsets.all(20),
       child: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
@@ -110,7 +116,7 @@ class LoginScreen extends ConsumerWidget {
               email = value;
             }),
             SizedBox(height: 10),
-            Text(tm.get(generalPassword)),
+            Text(tm.get('סיסמה')),
             SizedBox(height: 50),
             TextField(
                 key: Key('password'),
@@ -120,12 +126,14 @@ class LoginScreen extends ConsumerWidget {
             SizedBox(height: 10),
             Text(tm.get(generalEmail)),
             SizedBox(height: 80),
-            ElevatedButton(
-              key: Key('login'),
-                onPressed: () => ref
-                    .read(loginNotifierProvider.notifier)
-                    .performLogin(email, password),
-                child: Text(tm.get(homeScreenLoginButton))),
+            Center(
+              child: ElevatedButton(
+                key: Key('login'),
+                  onPressed: () => ref
+                      .read(loginNotifierProvider.notifier)
+                      .performLogin(email, password),
+                  child: Text(tm.get(homeScreenLoginButton))),
+            ),
           ],
         ),
       ),

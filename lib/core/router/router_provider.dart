@@ -44,114 +44,6 @@ final goRouter = GoRouter(
                navigationShell: navigationShell);
           },
           branches: [
-            StatefulShellBranch(
-              navigatorKey: _shellNavigatorCart,
-              routes: [
-                GoRoute(
-                    path: AppPages.cart.routePath,
-                    name: AppPages.cart.name,
-                    pageBuilder: (context, state) => NoTransitionPage(
-                      child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'This is Cart Screen',
-                                  style: TextStyle(
-                                    color: Colors.yellow,
-                                  ),
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      navigationManager.goToLogoutScreen();
-                                    },
-                                    child: Text('Next Screen'))
-                              ],
-                            )),
-                      ),
-                    ),
-              ],
-            ),
-            StatefulShellBranch(
-              navigatorKey: _shellNavigatorOrders,
-              routes: [
-                GoRoute(
-                    path: AppPages.orders.routePath,
-                    name: AppPages.orders.name,
-                    pageBuilder: (context, state) => NoTransitionPage(
-                      child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'This is Orders Screen',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      navigationManager.goToNextOrdersScreen();
-                                    },
-                                    child: Text('Next Screen'))
-                              ],
-                            )),
-                      ),
-                    ),
-                GoRoute(
-                  path: AppPages.ordersNext.routePath,
-                  name: AppPages.ordersNext.name,
-                  builder: (context, state) => Scaffold(
-                    appBar: AppBar(title: Text('next order screen app bar'),),
-                    body: Center(
-                        child: Text(
-                            'This is Orders Screen with next route')),
-                  ),
-                )
-              ],
-            ),
-            StatefulShellBranch(
-              navigatorKey: _shellNavigatorBusiness,
-              routes: [
-                GoRoute(
-                    path: AppPages.business.routePath,
-                    name: AppPages.business.name,
-                    pageBuilder: (context, state) => NoTransitionPage(
-                      child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'This is Business Screen',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      navigationManager.goToNextBusinessScreen();
-                                    },
-                                    child: Text('Next Screen'))
-                              ],
-                            )),
-                      ),
-                    ),
-                GoRoute(
-                  path: AppPages.businessNext.routePath,
-                  name: AppPages.businessNext.name,
-                  builder: (context, state) => Scaffold(
-                    appBar: AppBar(title: Text('next business screen app bar'),),
-                    body: Center(
-                        child: Text(
-                          'This is Business Screen with next route',
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
-                        )),
-                  ),
-                )
-              ],
-            ),
             StatefulShellBranch(navigatorKey: _shellNavigatorHome, routes: [
               GoRoute(
                   path: AppPages.login.routePath,
@@ -203,6 +95,114 @@ final goRouter = GoRouter(
                         ]),
                   ]),
             ]),
+            StatefulShellBranch(
+              navigatorKey: _shellNavigatorBusiness,
+              routes: [
+                GoRoute(
+                  path: AppPages.business.routePath,
+                  name: AppPages.business.name,
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'This is Business Screen',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  navigationManager.goToNextBusinessScreen();
+                                },
+                                child: Text('Next Screen'))
+                          ],
+                        )),
+                  ),
+                ),
+                GoRoute(
+                  path: AppPages.businessNext.routePath,
+                  name: AppPages.businessNext.name,
+                  builder: (context, state) => Scaffold(
+                    appBar: AppBar(title: Text('next business screen app bar'),),
+                    body: Center(
+                        child: Text(
+                          'This is Business Screen with next route',
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        )),
+                  ),
+                )
+              ],
+            ),
+            StatefulShellBranch(
+              navigatorKey: _shellNavigatorOrders,
+              routes: [
+                GoRoute(
+                  path: AppPages.orders.routePath,
+                  name: AppPages.orders.name,
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'This is Orders Screen',
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  navigationManager.goToNextOrdersScreen();
+                                },
+                                child: Text('Next Screen'))
+                          ],
+                        )),
+                  ),
+                ),
+                GoRoute(
+                  path: AppPages.ordersNext.routePath,
+                  name: AppPages.ordersNext.name,
+                  builder: (context, state) => Scaffold(
+                    appBar: AppBar(title: Text('next order screen app bar'),),
+                    body: Center(
+                        child: Text(
+                            'This is Orders Screen with next route')),
+                  ),
+                )
+              ],
+            ),
+            StatefulShellBranch(
+              navigatorKey: _shellNavigatorCart,
+              routes: [
+                GoRoute(
+                  path: AppPages.cart.routePath,
+                  name: AppPages.cart.name,
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'This is Cart Screen',
+                              style: TextStyle(
+                                color: Colors.yellow,
+                              ),
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  navigationManager.goToLogoutScreen();
+                                },
+                                child: Text('Next Screen'))
+                          ],
+                        )),
+                  ),
+                ),
+              ],
+            ),
           ]),
     ]
     );

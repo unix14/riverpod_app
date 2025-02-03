@@ -11,4 +11,5 @@ final Map<String, String> translationsDefaults = {
   homeScreenJumpToPageX: "Jump to page X",
   generalEmail: "Email",
   generalPassword: "Password",
+  homeScreenChangeLanguage: "Change Language",
 };

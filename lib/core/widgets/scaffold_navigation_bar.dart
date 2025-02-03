@@ -44,7 +44,7 @@ class CustomNavigationBar extends StatefulWidget {
 }
 
 class _CustomNavigationBarState extends State<CustomNavigationBar> {
-  int selectedIndex = 3;
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -58,16 +58,16 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               NavigationBarItem(
-                label: 'סל הזמנה',
-                iconData: Icons.shopping_cart,
+                label: 'בית',
+                iconData: Icons.home,
                 isSelected: selectedIndex == 0,
                 onTap: () {
                   itemSelected(0);
                 },
               ),
               NavigationBarItem(
-                label: 'הזמנות',
-                iconData: Icons.save,
+                label: 'העסק שלי',
+                iconData: Icons.adjust_rounded,
                 isSelected: selectedIndex == 1,
                 onTap: () {
                   itemSelected(1);
@@ -84,16 +84,16 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                 ),
               ),
               NavigationBarItem(
-                label: 'העסק שלי',
-                iconData: Icons.adjust_rounded,
+                label: 'הזמנות',
+                iconData: Icons.save,
                 isSelected: selectedIndex == 2,
                 onTap: () {
                   itemSelected(2);
                 },
               ),
               NavigationBarItem(
-                label: 'בית',
-                iconData: Icons.home,
+                label: 'סל הזמנה',
+                iconData: Icons.shopping_cart,
                 isSelected: selectedIndex == 3,
                 onTap: () {
                   itemSelected(3);
@@ -121,15 +121,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Text(
-                        'מה מזמינים היום?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
                     InkWell(
                       onTap: () {
                         context.pop();
@@ -140,6 +131,15 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                         size: 16,
                       ),
                     ),
+                    Expanded(
+                      child: Text(
+                        'מה מזמינים היום?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 36,),
@@ -147,9 +147,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SaleOrganizationItem(iconPath: 'iconPath', title: 'אלכוהול', isCartExist: true,),
-                    SaleOrganizationItem(iconPath: 'iconPath', title: 'חלב, סחוט ויין'),
                     SaleOrganizationItem(iconPath: 'iconPath', title: 'משקאות'),
+                    SaleOrganizationItem(iconPath: 'iconPath', title: 'חלב, סחוט ויין'),
+                    SaleOrganizationItem(iconPath: 'iconPath', title: 'אלכוהול', isCartExist: true,),
                   ],
                 )
               ],
