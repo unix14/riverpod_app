@@ -5,7 +5,7 @@ import 'package:riverpod_app/app_startup_widget.dart';
 import 'package:riverpod_app/core/router/navigation_manager.dart';
 import 'package:riverpod_app/core/router/route_utils.dart';
 import 'package:riverpod_app/core/widgets/scaffold_navigation_bar.dart';
-import 'package:riverpod_app/feature2/products_screen.dart';
+import 'package:riverpod_app/products_list/presentation/screens/products_list_screen.dart';
 
 import '../../feature1/presentation/screens/login_screen.dart';
 
@@ -141,28 +141,12 @@ final goRouter = GoRouter(
               navigatorKey: _shellNavigatorOrders,
               routes: [
                 GoRoute(
-                  path: AppPages.orders.routePath,
-                  name: AppPages.orders.name,
-                  pageBuilder: (context, state) => NoTransitionPage(
-                    child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'This is Orders Screen',
-                              style: TextStyle(
-                                color: Colors.blue,
-                              ),
-                            ),
-                            ElevatedButton(
-                                onPressed: () {
-                                  navigationManager.goToNextOrdersScreen();
-                                },
-                                child: Text('Next Screen'))
-                          ],
-                        )),
-                  ),
-                ),
+                    path: AppPages.orders.routePath,
+                    name: AppPages.orders.name,
+                    pageBuilder: (context, state) => NoTransitionPage(
+                      child: ProductsListScreen(),
+                      ),
+                    ),
                 GoRoute(
                   path: AppPages.ordersNext.routePath,
                   name: AppPages.ordersNext.name,
@@ -203,6 +187,57 @@ final goRouter = GoRouter(
                 ),
               ],
             ),
+            StatefulShellBranch(navigatorKey: _shellNavigatorHome, routes: [
+              GoRoute(
+                  path: AppPages.login.routePath,
+                  name: AppPages.login.name,
+                  pageBuilder: (context, state) => NoTransitionPage(child: const LoginScreen()),
+                  routes: [
+                    GoRoute(
+                        path: AppPages.products.routePath,
+                        name: AppPages.products.name,
+                        pageBuilder: (context, state) => CustomTransitionPage(
+                            child: ProductsListScreen(),
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(
+                                      1, 0), // Slide in from the right
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              );
+                            }),
+                        routes: [
+                          GoRoute(
+                              path: '/pagex',
+                              name: AppPages.pagex.name,
+                              pageBuilder: (context, state) =>
+                                  CustomTransitionPage(
+                                    child: Scaffold(
+                                        appBar: AppBar(title: Text('pagex')),
+                                        body: Center(child: Text('pagex'))),
+                                    transitionsBuilder: (BuildContext context,
+                                        Animation<double> animation,
+                                        Animation<double> secondaryAnimation,
+                                        Widget child) {
+                                      return SlideTransition(
+                                        position: Tween<Offset>(
+                                          begin: const Offset(1,
+                                              0), // Slide in from the right
+                                          end: Offset.zero,
+                                        ).animate(animation),
+                                        child: child,
+                                      );
+                                    },
+                                  )
+                              ),
+                        ]),
+                  ]),
+            ]),
           ]),
     ]
     );

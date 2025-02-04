@@ -18,7 +18,15 @@ class ProductsListModel {
   final ProductViewType viewType;
   final ProductListType listType;
 
-  ProductsListModel({required this.id, required this.name, required this.viewType, required this.listType});
+  int amount = 0;
+
+  ProductsListModel({
+    required this.id,
+    required this.name,
+    required this.viewType,
+    required this.listType,
+    this.amount = 0,
+  });
 
   factory ProductsListModel.fromJson(Map<String, dynamic> json) {
     return ProductsListModel(
@@ -26,6 +34,7 @@ class ProductsListModel {
       name: json['name'],
       viewType: json['viewType'],
       listType: json['listType'],
+      amount: json['amount'],
     );
   }
 
@@ -35,6 +44,7 @@ class ProductsListModel {
       'name': name,
       'viewType': viewType,
       'listType': listType,
+      'amount': amount,
     };
   }
 }

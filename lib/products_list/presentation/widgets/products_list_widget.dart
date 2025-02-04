@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:riverpod_app/core/mixins/product_list_model_mixin.dart';
 import 'package:riverpod_app/products_list/data/models/products_list_model.dart';
 import 'package:riverpod_app/products_list/domain/entities/products_list_entity.dart';
 
-class ProductsListWidget extends StatelessWidget {
+class ProductsListWidget extends ConsumerWidget {
   final ProductsListEntity productsListEntity;
 
   const ProductsListWidget(this.productsListEntity, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Container(
@@ -26,7 +27,7 @@ class ProductsListWidget extends StatelessWidget {
                   crossAxisCellCount:
                       product.viewType == ProductViewType.full ? 2 : 1,
                   mainAxisExtent: product.viewType == ProductViewType.full ? 40 : 120,
-                  child: product.getProductWidget(),
+                  child: product.getProductWidget(ref),
                 );
               }).toList(),
             ),
