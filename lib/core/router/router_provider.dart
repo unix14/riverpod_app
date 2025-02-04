@@ -54,7 +54,7 @@ final goRouter = GoRouter(
                         path: AppPages.products.routePath,
                         name: AppPages.products.name,
                         pageBuilder: (context, state) => CustomTransitionPage(
-                            child: ProductsScreen(),
+                            child: ProductsListScreen(),
                             transitionsBuilder: (BuildContext context,
                                 Animation<double> animation,
                                 Animation<double> secondaryAnimation,
