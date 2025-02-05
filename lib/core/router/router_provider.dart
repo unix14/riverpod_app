@@ -19,6 +19,20 @@ final _shellNavigatorCart = GlobalKey<NavigatorState>(debugLabel: 'cart');
 final goRouterProvider = Provider<GoRouter>((ref) {
   final navigationManager = ref.read(navigationManagerProvider);
 
+
+  void goBranch(StatefulNavigationShell navigationShell, int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
+
+  void goBack(StatefulNavigationShell navigationShell) {
+    if(!navigationManager.goBack()){
+      goBranch(navigationShell, 0);
+    }
+  }
+
 final goRouter = GoRouter(
     initialLocation: AppPages.init.routePath,
     navigatorKey: _rootNavigatorKey,
@@ -41,7 +55,10 @@ final goRouter = GoRouter(
       StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
             return ScaffoldNavigationBar(
-               navigationShell: navigationShell);
+               navigationShell: navigationShell,
+               onGoBack: () => goBack(navigationShell),
+               onGoBranch: (index) => goBranch(navigationShell, index),
+            );
           },
           branches: [
             StatefulShellBranch(navigatorKey: _shellNavigatorHome, routes: [

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_app/core/router/navigation_manager.dart';
+import 'package:riverpod_app/core/widgets/header.dart';
 import 'package:riverpod_app/core/widgets/sale_organization_item.dart';
 
 import 'navigation_bar_item.dart';
@@ -8,29 +10,27 @@ class ScaffoldNavigationBar extends StatelessWidget {
   const ScaffoldNavigationBar({
     super.key,
     required this.navigationShell,
+    required this.onGoBack,
+    required this.onGoBranch,
   });
 
   final StatefulNavigationShell navigationShell;
 
-  void _goBranch(int index) {
-    navigationShell.goBranch(
-      index,
-      initialLocation: index == navigationShell.currentIndex,
-    );
-  }
+  final Function() onGoBack;
+  final Function(int index) onGoBranch;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('navigation screens app bar'),
+        appBar: Header(
+          subTitleString: '882494 ארומה רמת-השרון',
+          titleString: 'הדר חדש ודנדש',
+          context: context,
+          onBackPressed: () => onGoBack(),
         ),
         body: navigationShell,
         bottomNavigationBar: CustomNavigationBar(
-          onSelectionChanged: (int selection) {
-            _goBranch(selection);
-          },
-        ));
+            onSelectionChanged: (int selection) => onGoBranch(selection)));
   }
 }
 
@@ -142,14 +142,21 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                     ),
                   ],
                 ),
-                SizedBox(height: 36,),
+                SizedBox(
+                  height: 36,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SaleOrganizationItem(iconPath: 'iconPath', title: 'משקאות'),
-                    SaleOrganizationItem(iconPath: 'iconPath', title: 'חלב, סחוט ויין'),
-                    SaleOrganizationItem(iconPath: 'iconPath', title: 'אלכוהול', isCartExist: true,),
+                    SaleOrganizationItem(
+                        iconPath: 'iconPath', title: 'חלב, סחוט ויין'),
+                    SaleOrganizationItem(
+                      iconPath: 'iconPath',
+                      title: 'אלכוהול',
+                      isCartExist: true,
+                    ),
                   ],
                 )
               ],
