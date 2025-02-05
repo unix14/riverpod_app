@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,9 +11,17 @@ class StorageManager{
 
   Future<StorageManager> init() async {
     /// init Hive
-    final directory = await getApplicationDocumentsDirectory();
-    Hive.init(directory.path);
-    _defaultBox = await Hive.openBox(_defaultBoxKey);
+    if(kIsWeb) {
+      /// Hive is not supported on web
+      /// You can use local storage or other web storage options
+      /// https://pub.dev/packages/localstorage
+      /// https://pub.dev/packages/shared_preferences
+      /// todo: implement web local storage
+    } else {
+      final directory = await getApplicationDocumentsDirectory();
+      Hive.init(directory.path);
+      _defaultBox = await Hive.openBox(_defaultBoxKey);
+    }
 
     debugPrint('Hive initialized');
     return this;

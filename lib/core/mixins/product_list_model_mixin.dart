@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_app/products_list/data/models/products_list_model.dart';
 import 'package:riverpod_app/products_list/presentation/widgets/simple_card_item.dart';
 import 'package:riverpod_app/products_list/presentation/widgets/special_card_item.dart';
@@ -17,12 +18,12 @@ extension ProductListModelMixin on ProductsListModel {
     }
   }
 
-  Widget getProductWidget() {
+  Widget getProductWidget(WidgetRef ref) {
     switch (listType) {
       case ProductListType.TitleItem:
         return TitleCardItem(product: this);
       case ProductListType.SimpleItem:
-        return SimpleCardItem(product: this);
+        return SimpleCardItem(product: this, ref: ref,);
       case ProductListType.SpecialItem:
         return SpecialCardItem(product: this);
       case ProductListType.SimpleAdItem:
