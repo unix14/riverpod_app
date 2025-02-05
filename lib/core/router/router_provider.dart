@@ -204,57 +204,6 @@ final goRouter = GoRouter(
                 ),
               ],
             ),
-            StatefulShellBranch(navigatorKey: _shellNavigatorHome, routes: [
-              GoRoute(
-                  path: AppPages.login.routePath,
-                  name: AppPages.login.name,
-                  pageBuilder: (context, state) => NoTransitionPage(child: const LoginScreen()),
-                  routes: [
-                    GoRoute(
-                        path: AppPages.products.routePath,
-                        name: AppPages.products.name,
-                        pageBuilder: (context, state) => CustomTransitionPage(
-                            child: ProductsListScreen(),
-                            transitionsBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation,
-                                Widget child) {
-                              return SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(
-                                      1, 0), // Slide in from the right
-                                  end: Offset.zero,
-                                ).animate(animation),
-                                child: child,
-                              );
-                            }),
-                        routes: [
-                          GoRoute(
-                              path: '/pagex',
-                              name: AppPages.pagex.name,
-                              pageBuilder: (context, state) =>
-                                  CustomTransitionPage(
-                                    child: Scaffold(
-                                        appBar: AppBar(title: Text('pagex')),
-                                        body: Center(child: Text('pagex'))),
-                                    transitionsBuilder: (BuildContext context,
-                                        Animation<double> animation,
-                                        Animation<double> secondaryAnimation,
-                                        Widget child) {
-                                      return SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: const Offset(1,
-                                              0), // Slide in from the right
-                                          end: Offset.zero,
-                                        ).animate(animation),
-                                        child: child,
-                                      );
-                                    },
-                                  )
-                              ),
-                        ]),
-                  ]),
-            ]),
           ]),
     ]
     );
