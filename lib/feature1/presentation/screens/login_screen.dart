@@ -28,19 +28,11 @@ class LoginScreen extends ConsumerWidget {
       });
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          title:
-            currentState.when(
-                data: (data) => Text(data == LoginState.loggedIn ? 'Logout State' : 'Login State'),
-                error: (error, _) => Text(error.toString()),
-                loading: () => const CircularProgressIndicator()),
-        ),
-        body: switch (currentState.value ?? LoginState.loggedOut) {
+    return switch (currentState.value ?? LoginState.loggedOut) {
           LoginState.loggedIn => logoutWidget(ref, tm),
           LoginState.loggedOut => loginWidget(ref, tm),
           LoginState.loading => Center(child: CircularProgressIndicator()),
-        });
+        };
   }
 
   // Method to show an error dialog
