@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:riverpod_app/core/router/navigation_manager.dart';
+import 'package:riverpod_app/core/providers/service_locator.dart';
 import 'package:riverpod_app/core/widgets/header.dart';
 import 'package:riverpod_app/core/widgets/sale_organization_item.dart';
 
 import 'navigation_bar_item.dart';
 
-class ScaffoldNavigationBar extends StatelessWidget {
+class ScaffoldNavigationBar extends ConsumerWidget {
   const ScaffoldNavigationBar({
     super.key,
     required this.navigationShell,
@@ -15,36 +16,42 @@ class ScaffoldNavigationBar extends StatelessWidget {
   });
 
   final StatefulNavigationShell navigationShell;
-
-  final Function() onGoBack;
+  final bool Function() onGoBack;
   final Function(int index) onGoBranch;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         appBar: Header(
           subTitleString: '882494 ארומה רמת-השרון',
           titleString: 'הדר חדש ודנדש',
           context: context,
-          onBackPressed: () => onGoBack(),
+          onBackPressed: () {
+            if(!onGoBack()){
+              ref.read(navigationBarIndexProvider.notifier).state = 0;
+            }
+          },
         ),
         body: navigationShell,
         bottomNavigationBar: CustomNavigationBar(
-            onSelectionChanged: (int selection) => onGoBranch(selection)));
+            onSelectionChanged: (int selection) {
+              ref.read(navigationBarIndexProvider.notifier).state = selection;
+              onGoBranch(selection);
+            }));
   }
 }
 
-class CustomNavigationBar extends StatefulWidget {
+class CustomNavigationBar extends ConsumerStatefulWidget {
   final Function(int selection) onSelectionChanged;
 
   const CustomNavigationBar({super.key, required this.onSelectionChanged});
 
   @override
-  State<CustomNavigationBar> createState() => _CustomNavigationBarState();
+  ConsumerState createState() => _CustomNavigationBarState();
 }
 
-class _CustomNavigationBarState extends State<CustomNavigationBar> {
-  int selectedIndex = 0;
+class _CustomNavigationBarState extends ConsumerState<CustomNavigationBar> {
+  // int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +67,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               NavigationBarItem(
                 label: 'בית',
                 iconData: Icons.home,
-                isSelected: selectedIndex == 0,
+                isSelected: ref.watch(navigationBarIndexProvider) == 0,
                 onTap: () {
                   itemSelected(0);
                 },
@@ -68,7 +75,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               NavigationBarItem(
                 label: 'העסק שלי',
                 iconData: Icons.adjust_rounded,
-                isSelected: selectedIndex == 1,
+                isSelected: ref.watch(navigationBarIndexProvider) == 1,
                 onTap: () {
                   itemSelected(1);
                 },
@@ -86,7 +93,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               NavigationBarItem(
                 label: 'הזמנות',
                 iconData: Icons.save,
-                isSelected: selectedIndex == 2,
+                isSelected: ref.watch(navigationBarIndexProvider) == 2,
                 onTap: () {
                   itemSelected(2);
                 },
@@ -94,7 +101,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               NavigationBarItem(
                 label: 'סל הזמנה',
                 iconData: Icons.shopping_cart,
-                isSelected: selectedIndex == 3,
+                isSelected: ref.watch(navigationBarIndexProvider) == 3,
                 onTap: () {
                   itemSelected(3);
                 },
@@ -167,7 +174,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
 
   itemSelected(int selected) {
     setState(() {
-      selectedIndex = selected;
+      // selectedIndex = selected;
       widget.onSelectionChanged(selected);
     });
   }

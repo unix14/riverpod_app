@@ -75,4 +75,8 @@ final loggerProvider = Provider<Logger>((ref) {
   return Logger();
 });
 
+//***** navigation bar index provider *****//
+final navigationBarIndexProvider = StateProvider((ref) => 0);
+
+
 

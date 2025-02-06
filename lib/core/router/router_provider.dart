@@ -19,7 +19,6 @@ final _shellNavigatorCart = GlobalKey<NavigatorState>(debugLabel: 'cart');
 final goRouterProvider = Provider<GoRouter>((ref) {
   final navigationManager = ref.read(navigationManagerProvider);
 
-
   void goBranch(StatefulNavigationShell navigationShell, int index) {
     navigationShell.goBranch(
       index,
@@ -27,10 +26,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     );
   }
 
-  void goBack(StatefulNavigationShell navigationShell) {
+  //return false if nothing to pop
+  bool goBack(StatefulNavigationShell navigationShell) {
     if(!navigationManager.goBack()){
       goBranch(navigationShell, 0);
+      return false;
     }
+    return true;
   }
 
 final goRouter = GoRouter(

@@ -22,12 +22,13 @@ class NavigationManager{
     goRouter.replace(route, extra: extra);
   }
 
+  //return false if nothing to pop
   bool goBack() {
-    if(!goRouter.canPop()){
-      return false;
+    if(goRouter.canPop()){
+      goRouter.pop();
+      return true;
     }
-    goRouter.pop();
-    return true;
+    return false;
   }
 
   bool isCurrentRoute(String route) {
