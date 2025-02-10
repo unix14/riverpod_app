@@ -7,11 +7,13 @@ import '../widgets/products_list_widget.dart';
 class ProductsListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productsListEntity = ref.watch(productsListControllerProvider);
-    ProductsListEntity listEntity = ref.read(productsListControllerProvider.notifier).productsListEntity;
+    final productsListState = ref.watch(productsListControllerProvider);
+    final productsListController = ref.watch(productsListControllerProvider.notifier);
+    ProductsListEntity? listEntity = productsListController.productsListEntity;
+
     return Center(
       // todo add top bar categories
-      child: productsListEntity.when(
+      child: productsListState.when(
           data: (data) => ProductsListWidget(listEntity),
           error: (error, _) => Container(),
           loading: () => CircularProgressIndicator()

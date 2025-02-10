@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_app/products_list/data/models/products_list_model.dart';
@@ -10,52 +9,46 @@ import '../../domain/entities/products_list_entity.dart';
 import '../../domain/usecases/decrease_amount_for_product_in_products_list_usecase.dart';
 import '../../domain/usecases/products_list_usecase.dart';
 
-enum ProductsListState { initial, loading, loaded, error }
 
-
-final productsListControllerProvider = AutoDisposeAsyncNotifierProvider<ProductsListController, ProductsListState>(
+final productsListControllerProvider = AutoDisposeAsyncNotifierProvider<ProductsListController, ProductsListEntity>(
       () => ProductsListController(),
 );
 
-class ProductsListController extends AutoDisposeAsyncNotifier<ProductsListState> {
+class ProductsListController extends AutoDisposeAsyncNotifier<ProductsListEntity> {
 
-  late ProductsListEntity productsListEntity;
-
+  ProductsListEntity productsListEntity = ProductsListEntity(products: [], title: '');
 
   @override
-  FutureOr<ProductsListState> build() async {
-    state = AsyncValue.data(ProductsListState.loading);
+  FutureOr<ProductsListEntity> build() async {
+    state = AsyncValue.loading();
     try {
       final logoutUseCase = ref.read(productsListUseCaseProvider);
       final productsList = await logoutUseCase.execute();
-
       productsListEntity = productsList;
 
-      state = AsyncValue.data(ProductsListState.loaded);
-      return ProductsListState.loaded;
+      state = AsyncValue.data(productsList);
     } catch (e) {
-      state = AsyncValue.data(ProductsListState.error);
-      return ProductsListState.error;
+      state = AsyncValue.error(0, StackTrace.current);
     }
-    return ProductsListState.initial;
+    return productsListEntity;
   }
 
   Future<void> increaseAmount(ProductsListModel product) async {
-    state = AsyncValue.data(ProductsListState.loading);
+    state = AsyncValue.loading();
     try {
       final increaseUseCase = ref.read(increaseAmountForProductInProductsListUseCaseProvider);
       final productsList = await increaseUseCase.execute(product);
 
       productsListEntity = productsList;
 
-      state = AsyncValue.data(ProductsListState.loaded);
+      state = AsyncValue.data(productsList);
     } catch (e) {
-      state = AsyncValue.data(ProductsListState.error);
+      state = AsyncValue.error(0, StackTrace.current);
     }
   }
 
   Future<void> decreaseAmount(ProductsListModel product) async {
-    state = AsyncValue.data(ProductsListState.loading);
+    state = AsyncValue.loading();
 
     try {
       final decreaseUseCase = ref.read(decreaseAmountForProductInProductsListUseCaseProvider);
@@ -63,12 +56,11 @@ class ProductsListController extends AutoDisposeAsyncNotifier<ProductsListState>
 
       productsListEntity = productsList;
 
-      state = AsyncValue.data(ProductsListState.loaded);
+      state = AsyncValue.data(productsList);
     } catch (e) {
-      state = AsyncValue.data(ProductsListState.error);
+      state = AsyncValue.error(0, StackTrace.current);
     }
   }
-
 
   goToProductsScreen() async {
     ref.read(navigationManagerProvider).goToProductsScreen();
