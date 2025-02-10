@@ -36,13 +36,21 @@ class FeatureGenerator {
   FeatureGenerator._internal();
 
   /// Converts a string to snake_case (lowercase with underscores)
+  /// For example, 'MyFeatureName' becomes 'my_feature_name'
   String toSnakeCase(String input) {
     return input.replaceAllMapped(RegExp(r'([a-z])([A-Z])'), (match) {
       return '${match.group(1)}_${match.group(2)}';
     }).toLowerCase();
   }
 
+  /// Converts a string to camelCase (lowercase first letter)
+  /// For example, 'MyFeatureName' becomes 'myFeatureName'
+  String toCamelCase(String input) {
+    return input[0].toLowerCase() + input.substring(1);
+  }
+
   /// Converts a string to PascalCase (uppercase first letter)
+  /// For example, 'my_feature_name' becomes 'MyFeatureName'
   String toPascalCase(String input) {
     return input[0].toUpperCase() + input.substring(1);
   }
@@ -132,7 +140,7 @@ abstract class ${toPascalCase(featureName)}Repository {
   Future<${toPascalCase(featureName)}Entity> get${toPascalCase(featureName)}();
 }
 
-final ${toSnakeCase(featureName)}RepositoryProvider = Provider<${toPascalCase(featureName)}Repository>((ref) {
+final ${toCamelCase(featureName)}RepositoryProvider = Provider<${toPascalCase(featureName)}Repository>((ref) {
   return ${toPascalCase(featureName)}RepositoryImpl();
 });
 ''',
@@ -151,28 +159,34 @@ class ${toPascalCase(featureName)}UseCase {
   }
 }
 
-final ${toSnakeCase(featureName)}UseCaseProvider = Provider((ref) {
-  final repository = ref.watch(${toSnakeCase(featureName)}RepositoryProvider);
+final ${toCamelCase(featureName)}UseCaseProvider = Provider((ref) {
+  final repository = ref.watch(${toCamelCase(featureName)}RepositoryProvider);
   return ${toPascalCase(featureName)}UseCase(repository);
 });
 ''',
       'presentation/providers': '''
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/usecases/${toSnakeCase(featureName)}_usecase.dart';
 import '../../domain/entities/${toSnakeCase(featureName)}_entity.dart';
 
-final ${toSnakeCase(featureName)}Provider = StateNotifierProvider<${toPascalCase(featureName)}Provider, ${toPascalCase(featureName)}Entity?>((ref) {
-  final useCase = ref.watch(${toSnakeCase(featureName)}UseCaseProvider);
-  return ${toPascalCase(featureName)}Provider(useCase);
-});
+final ${toCamelCase(featureName)}ControllerProvider = AutoDisposeAsyncNotifierProvider<${toPascalCase(featureName)}Controller, ${toPascalCase(featureName)}Entity>(
+  () => ${toPascalCase(featureName)}Controller(),
+);
 
-class ${toPascalCase(featureName)}Provider extends StateNotifier<${toPascalCase(featureName)}Entity?> {
-  final ${toPascalCase(featureName)}UseCase useCase;
-
-  ${toPascalCase(featureName)}Provider(this.useCase) : super(null);
-
-  Future<void> fetch${toPascalCase(featureName)}() async {
-    state = await useCase.execute();
+class ${toPascalCase(featureName)}Controller extends AutoDisposeAsyncNotifier<${toPascalCase(featureName)}Entity> {
+  @override
+  FutureOr<${toPascalCase(featureName)}Entity> build() async {
+    state = AsyncValue.loading();
+    try {
+      final useCase = ref.read(${toCamelCase(featureName)}UseCaseProvider);
+      final entity = await useCase.execute();
+      state = AsyncValue.data(entity);
+      return entity;
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+      rethrow;
+    }
   }
 }
 ''',
@@ -180,20 +194,23 @@ class ${toPascalCase(featureName)}Provider extends StateNotifier<${toPascalCase(
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/${toSnakeCase(featureName)}_provider.dart';
+${components != null && components.contains('widget') ? "import '../widgets/${toSnakeCase(featureName)}_widget.dart';" : ''}
 
 class ${toPascalCase(featureName)}Screen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final entity = ref.watch(${toSnakeCase(featureName)}Provider);
+    final state = ref.watch(${toCamelCase(featureName)}ControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('${toPascalCase(featureName)} Screen'),
       ),
       body: Center(
-        child: entity == null
-            ? CircularProgressIndicator()
-            : Text('Name: \${entity.name}'),
+        child: state.when(
+          data: (data) => ${components != null && components.contains('widget') ? "${toPascalCase(featureName)}Widget(entity: data)" : "Text('Name: \${data.name}')"},
+          error: (error, _) => Text('Error: \${error.toString()}'),
+          loading: () => CircularProgressIndicator(),
+        ),
       ),
     );
   }
@@ -201,17 +218,18 @@ class ${toPascalCase(featureName)}Screen extends ConsumerWidget {
 ''',
       'presentation/widgets': '''
 import 'package:flutter/material.dart';
+import '../../domain/entities/${toSnakeCase(featureName)}_entity.dart';
 
 class ${toPascalCase(featureName)}Widget extends StatelessWidget {
-  final String name;
+  final ${toPascalCase(featureName)}Entity entity;
 
-  ${toPascalCase(featureName)}Widget({required this.name});
+  ${toPascalCase(featureName)}Widget({required this.entity});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
-      child: Text(name),
+      child: Text('Name: \${entity.name}'),
     );
   }
 }
