@@ -80,10 +80,13 @@ class FeatureGenerator {
     // Define content templates for each file type
     Map<String, String> templates = {
       'data/datasource': '''
+import '../../domain/entities/${toSnakeCase(featureName)}_entity.dart';
+
 class ${toPascalCase(featureName)}DataSource {
   // Fetch data from remote or local source
-  Future<void> fetchData() async {
-    // TODO: Implement fetchData
+  Future<${toPascalCase(featureName)}Entity> fetchData() async {
+    // TODO: Implement fetchData and return a ${toPascalCase(featureName)}Entity
+    return ${toPascalCase(featureName)}Entity(id: 1, name: 'Sample Name');
   }
 }
 ''',
@@ -110,16 +113,19 @@ class ${toPascalCase(featureName)}Model {
 }
 ''',
       'data/repositories': '''
-import '../models/${toSnakeCase(featureName)}_model.dart';
+import '../datasource/${toSnakeCase(featureName)}_data_source.dart';
 import '../../domain/entities/${toSnakeCase(featureName)}_entity.dart';
 import '../../domain/repositories/${toSnakeCase(featureName)}_repository.dart';
 
 class ${toPascalCase(featureName)}RepositoryImpl implements ${toPascalCase(featureName)}Repository {
+  final ${toPascalCase(featureName)}DataSource dataSource;
+
+  ${toPascalCase(featureName)}RepositoryImpl(this.dataSource);
+
   @override
   Future<${toPascalCase(featureName)}Entity> get${toPascalCase(featureName)}() async {
-    // TODO: Fetch data from data source
-    final model = ${toPascalCase(featureName)}Model(id: 1, name: 'Sample');
-    return ${toPascalCase(featureName)}Entity(id: model.id, name: model.name);
+    // Fetch data from data source
+    return await dataSource.fetchData();
   }
 }
 ''',
@@ -135,13 +141,15 @@ class ${toPascalCase(featureName)}Entity {
 import '../entities/${toSnakeCase(featureName)}_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/${toSnakeCase(featureName)}_repository_impl.dart';
+import '../../data/datasource/${toSnakeCase(featureName)}_data_source.dart';
 
 abstract class ${toPascalCase(featureName)}Repository {
   Future<${toPascalCase(featureName)}Entity> get${toPascalCase(featureName)}();
 }
 
 final ${toCamelCase(featureName)}RepositoryProvider = Provider<${toPascalCase(featureName)}Repository>((ref) {
-  return ${toPascalCase(featureName)}RepositoryImpl();
+  final dataSource = ${toPascalCase(featureName)}DataSource();
+  return ${toPascalCase(featureName)}RepositoryImpl(dataSource);
 });
 ''',
       'domain/usecases': '''
@@ -194,7 +202,7 @@ class ${toPascalCase(featureName)}Controller extends AutoDisposeAsyncNotifier<${
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/${toSnakeCase(featureName)}_provider.dart';
-${components != null && components.contains('widget') ? "import '../widgets/${toSnakeCase(featureName)}_widget.dart';" : ''}
+${(components == null || components != null && components.contains('widget')) ? "import '../widgets/${toSnakeCase(featureName)}_widget.dart';" : ''}
 
 class ${toPascalCase(featureName)}Screen extends ConsumerWidget {
   @override
@@ -207,7 +215,7 @@ class ${toPascalCase(featureName)}Screen extends ConsumerWidget {
       ),
       body: Center(
         child: state.when(
-          data: (data) => ${components != null && components.contains('widget') ? "${toPascalCase(featureName)}Widget(entity: data)" : "Text('Name: \${data.name}')"},
+          data: (data) => ${(components == null || components != null && components.contains('widget')) ? "${toPascalCase(featureName)}Widget(entity: data)" : "Text('Name: \${data.name}')"},
           error: (error, _) => Text('Error: \${error.toString()}'),
           loading: () => CircularProgressIndicator(),
         ),
